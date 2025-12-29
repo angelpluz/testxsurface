@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# XSF FullStack Developer Test - Pt.2
 
-## Getting Started
+Next.js App Router + MongoDB (Mongoose) + styled-components implementation for the XSF coding test.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js 18+ and npm
+- MongoDB Atlas or local MongoDB instance
+
+## Environment setup
+
+Create `.env.local` in the project root:
+
+```bash
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>/<database>?retryWrites=true&w=majority
+```
+
+## Install
+
+```bash
+npm install
+```
+
+## Seed sample data
+
+```bash
+npm run seed
+```
+
+This script clears the `products` collection and inserts 10 sample products.
+
+## Run the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/` Landing page with CTA links
+- `/products` Product list + search
+- `/upload` Upload product form
+- `/products/[id]` Product detail (optional page included)
 
-## Learn More
+## API endpoints
 
-To learn more about Next.js, take a look at the following resources:
+- `GET /api/products` - list products (sorted by `createdAt` desc)
+  - Optional: `?search=term` to search by name or code (case-insensitive, partial)
+- `POST /api/products` - create product
+- `GET /api/products/[id]` - fetch product by Mongo `_id`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Schema design notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `code` is unique to avoid duplicate product entries.
+- `images` stores URL strings only; no file uploads.
+- `price` is optional and validated as numeric when provided.
+- `createdAt` and `updatedAt` are managed by Mongoose timestamps.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - start dev server
+- `npm run seed` - seed database with sample products
